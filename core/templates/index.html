@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Inicial</title>
+</head>
+<body>
+    <center>
+        <img src="{% static 'images/logo_escoteiros_brasil.png' %}">
+        {% if logado == True %}
+            <p>Ok, usuário logado</p><br><br><br>
+            <a href="busca">Clique aqui para ir a página de busca</a><br><br>
+        {% else %}
+            <p>Necessário fazer login</p><br><br><br>
+            <a href="/admin/login/?next=/">Clique aqui para login</a><br><br>
+        {% endif %}
+        <a href="cadastro_nrs_registro">Ir para o cadastro de números de registro</a><br><br>
+        <a href="cadastro_escoteiro">Ir para o cadastro de escoteiros e Associados</a><br><br>
+        <a href="admin/">ADMIN</a><br>
+    </center>
+
+</body>
+</html>

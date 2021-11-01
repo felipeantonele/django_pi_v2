@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Números de Registro - Administrativo</title>
+</head>
+<body>
+
+
+<center>
+        <img src="{% static 'images/logo_escoteiros_brasil.png' %}">
+        {% if logado == True %}
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            {% block content %}
+            <div class="shadow-lg continer">
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                      <div class="x_panel">
+                        <div class="x_title">
+                          <h3>Cadastro de Números de Registro via Excel</h3>
+                            <p align="left">Instruções:</p>
+                            <p align="left">1 - Criar arquivo de excel 'xlsx'</p>
+                            <p align="left">2 - Dados na aba 'nrs_registro'</p>
+                            <p align="left">3 - Colunas: 'number_register', 'function_first', 'function_second', 'function_third', 'section', 'delete'</p>
+                            <p align="left">4 - Para apagar, digite 'x' na coluna delete</p>
+                            <a align="left" href="{% static 'files/Template_upload_nrs_registros.xlsx' %}">Baixar planilha template</a>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                          <div class="col-md-8 col-sm-12 col-xs-12 form-group">
+                            </label>
+                          </div>
+                                <input type="file" name="myfile" class="form-control" accept=".xlsx"><br>
+                                         <button type="submit" class="btn btn-success" >Upload</button><br>
+                                        <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+              </form>
+              </div>
+            {% endblock %}
+            {% if upload == True %}
+                <br>
+                <p>Quantidade de itens cadastrados: {{ qtd_cad }}</p>
+                <p>Quantidade de itens não cadastrados: {{ qtd_n_cad }}</p>
+                <p>Quantidade de itens apagados: {{ deletados }}</p>
+                <br>
+            {% endif %}
+
+        {% else %}
+            <p>Necessário fazer login</p>
+            <a href="/admin/login/?next=/cadastro_nrs_registro">Clique aqui para login</a><br><br><br>
+        {% endif %}
+        <br>
+        <a href="cadastro_escoteiro">Ir para o cadastro de escoteiros e Associados</a><br>
+        <a href="admin/">ADMIN</a><br>
+        <a href="/">Página Inicial</a><br>
+    </center>
+
+
+
+</body>
+</html>
