@@ -1,13 +1,14 @@
 # arquivo criado manualmente
 from django.urls import path
-from .views import index, busca, cadastro_escoteiro, cadastro_atividade, cadastro_nrs_registro
+from .views import index, busca, cad_esc, cadastro_atividade, cadastro_nrs_registro, cad_esc_p2
 
 
 urlpatterns = [
     path('', index, name='index_name'),
     path('cadastro_nrs_registro', cadastro_nrs_registro, name='cadastro_nrs_registro'),
     path('busca', busca, name='busca'),
-    path('cadastro_escoteiro', cadastro_escoteiro, name='cadastro_escoteiro'),
+    path('cad_esc', cad_esc, name='cad_esc'),
+    path('cad_esc_p2/<int:pk>', cad_esc_p2, name='cad_esc_p2'),
     path('cadastro_atividade', cadastro_atividade, name='cadastro_atividade'),
 ]
 

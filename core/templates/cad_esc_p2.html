@@ -1,0 +1,37 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2 Cadastro de Escoteiro</title>
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container">
+        <center>
+            <img src="{% static 'images/logo_escoteiros_brasil.png' %}">
+        </center>
+        <h1>Cadastro de Escoteiros</h1>
+
+        <p>Escoteiro ID: {{ data.id }}</p>
+        <p>Número de registro: {{ data.number_register }}</p>
+        <p>Primeira função: {{ data.function_first }}</p>
+        <p>Segunda função: {{ data.function_second }}</p>
+        <p>Terceira função: {{ data.function_third }}</p>
+        <p>Seção: {{ data.section }}</p>
+
+        {% bootstrap_messages %}
+
+        <form action="{% url 'cad_esc_p2' data.id %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            {% endbuttons %}
+        </form>
+    </div>
+    {% bootstrap_javascript jquery='full' %}
+</body>
+</html>

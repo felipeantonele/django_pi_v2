@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from .models import Skills, NumbersRegisters, AssociateData
-# from .forms import CadSkillsModelForm, CadScoutModelForm
+from .forms import NrRegisterForm, AssociateDataModelForm
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
@@ -62,26 +63,39 @@ def cadastro_nrs_registro(request):
     return render(request, 'cadastro_nrs_registro.html', context)
 
 
-def cadastro_skill(request):
-    """
-    Botão de busca para pesquisar uma habilidade, após pesquisa carregue o formulário
-    """
+def cad_esc(request):
+    form = NrRegisterForm(request.POST or None)
+    warning = False
+    if str(request.method) == 'POST':
+        if form.is_valid():
+            nr_post = form.cleaned_data['nr']
+            #print(nr_post)
+            if len(NumbersRegisters.objects.filter(number_register=str(nr_post.split('-')[0].strip()))) != 0:
+                id_nr_registro = NumbersRegisters.objects.filter(number_register=str(nr_post.split('-')[0].strip())).values_list('id', flat=True)[0]
+                return HttpResponseRedirect('/cad_esc_p2/' + str(id_nr_registro))
+                #return redirect(request, id_nr_registro)
+            else:
+                warning = True
+    form = NrRegisterForm()
     context = {
-        #'form': form,
-        'lista_skills': Skills.objects.all(),
+        'form': form,
         'logado': (str(request.user) != 'AnonymousUser'),
-    }
-    return render(request, 'cadastro_skill.html', context)
-
-
-def cadastro_escoteiro(request):
-    context = {
-        #'form': form,
-        'lista_scount': NumbersRegisters.objects.all(),
-        'logado': (str(request.user) != 'AnonymousUser'),
+        'warning': warning,
     }
     return render(request, 'cadastro_escoteiro.html', context)
 
+
+def cad_esc_p2(request, pk):
+    nr = NumbersRegisters.objects.filter(id=str(pk)).values_list('number_register', flat=True)[0]
+    form = AssociateDataModelForm(initial={'number_register': str(nr)})
+    #print(pk)
+    data1 = NumbersRegisters.objects.get(id=pk)
+    context = {
+        'form': form,
+        'data': data1,
+    }
+    #print(context)
+    return render(request, 'cad_esc_p2.html', context)
 
 
 def cadastro_atividade(request):
