@@ -1,10 +1,69 @@
+{% load bootstrap4 %}
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Competências - Associados ao Escoteiro</title>
+    {% bootstrap_css %}
 </head>
 <body>
+    <div class="container">
+        <center>
+            <img src="{% static 'images/logo_escoteiros_brasil.png' %}">
+        </center>
+        <h1>Cadastro de Escoteiros</h1>
+        <p>Número de registro: {{ data1.number_register }}</p>
+        <p>Nome do Escoteiro: {{ data2.function_first }}</p>
+        <p>Responsável 1: {{ data2.responsible_1 }}</p>
+        <p>Responsável 2: {{ data2.responsible_2 }}</p>
+        <p>Telefone: {{ data2.phone }}</p>
+        <p>E-mail: {{ data2.email }}</p>
+        <p>Primeira função: {{ data1.function_first }}</p>
+        <p>Seção: {{ data1.section }}</p>
 
+        {% bootstrap_messages %}
+
+        <form action="{% url 'cadastro_atividade' data2.id %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            {% endbuttons %}
+        </form>
+
+
+        <h2>Lista de competências e habilidades cadastradas</h2>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Número de Registro</th>
+                    <th scope="col">Nome da Competência/Habilidade</th>
+                    <th scope="col">Tipo de Competência/Habilidade</th>
+                    <th scope="col">Nome da pessoa</th>
+                    <th scope="col">Tipo de associação com o escoteiro</th>
+                    <th scope="col">Anotações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for skill in data3 %}
+                    <tr>
+                        <td scope="row">{{ skill.id }}</td>
+                        <td scope="row">{{ skill.number_register }}</td>
+                        <td scope="row">{{ skill.name_skill }}</td>
+                        <td scope="row">{{ skill.type_skill }}</td>
+                        <td scope="row">{{ skill.name_person }}</td>
+                        <td scope="row">{{ skill.type_person }}</td>
+                        <td scope="row">{{ skill.notes }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+    {% bootstrap_javascript jquery='full' %}
 </body>
 </html>

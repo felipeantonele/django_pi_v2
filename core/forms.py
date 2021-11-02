@@ -1,9 +1,15 @@
 from django import forms
-
 #from crispy_forms.helper import FormHelper
 #from crispy_forms.layout import Layout, Div, Submit, Row, Column, Field
+from .models import NumbersRegisters, AssociateData, Skills
 
-from .models import NumbersRegisters, AssociateData
+
+types_of_skills = [
+    ('Habilidade', 'Habilidade'),
+    ('Hobby', 'Hobby'),
+    ('Experiência', 'Experiência'),
+    ('Profissão', 'Profissão'),
+    ]
 
 
 class NrRegisterForm(forms.Form):
@@ -23,3 +29,16 @@ class AssociateDataModelForm(forms.ModelForm):
     accept_1 = forms.BooleanField(label='accept_1')
     accept_2 = forms.BooleanField(label='accept_2')
     accept_3 = forms.BooleanField(label='accept_3')
+
+
+class SkillsModelForm(forms.ModelForm):
+    class Meta:
+        model = Skills
+        fields = ['number_register','name_skill','type_skill','name_person','type_person','notes']
+    number_register = forms.CharField(label='Número de Registro', max_length=20)
+    name_skill = forms.CharField(label='Nome da Competência', max_length=100)
+    type_skill = forms.CharField(widget=forms.Select(choices=types_of_skills), label='Tipo de Habilidade')
+    name_person = forms.CharField(label='Nome da Pessoa', max_length=100)
+    type_person = forms.CharField(label='Tipo de associação com o escoteiro', max_length=100)
+    notes = forms.CharField(label='Anotações', max_length=100)
+

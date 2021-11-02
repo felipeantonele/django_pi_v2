@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from .models import Skills, NumbersRegisters, AssociateData
-from .forms import NrRegisterForm, AssociateDataModelForm
+from .forms import NrRegisterForm, AssociateDataModelForm, SkillsModelForm
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
@@ -87,16 +87,48 @@ def cad_esc(request):
 
 def cad_esc_p2(request, pk):
     nr = NumbersRegisters.objects.filter(id=str(pk)).values_list('number_register', flat=True)[0]
-    form = AssociateDataModelForm(initial={'number_register': str(nr)})
-    #print(pk)
+    if str(request.method) == 'POST':
+        form = AssociateDataModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            associete_cad = form.save(commit=False)
+            messages.success(request, 'Escoteiro  ' + str(associete_cad.name) + ' cadastrada com sucesso')
+            form = AssociateDataModelForm(initial={'number_register': str(nr)})
+            return HttpResponseRedirect('/cadastro_atividade/' + str(associete_cad.id))
+        else:
+            messages.error(request, 'Erro ao cadastrar Skill')
+    else:
+        form = AssociateDataModelForm(initial={'number_register': str(nr)})
     data1 = NumbersRegisters.objects.get(id=pk)
     context = {
         'form': form,
         'data': data1,
     }
-    #print(context)
     return render(request, 'cad_esc_p2.html', context)
 
 
-def cadastro_atividade(request):
-    return render(request, 'cadastro_atividade.html')
+def cadastro_atividade(request, pk):
+    nr = str(AssociateData.objects.filter(id=str(pk)).values_list('number_register', flat=True)[0])
+    if str(request.method) == 'POST':
+        form = SkillsModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            skill_cad = form.save(commit=False)
+            messages.success(request, 'Competência associada com sucesso - ' + str(skill_cad.name_skill))
+            form = SkillsModelForm(initial={'number_register': str(nr)})
+        else:
+            messages.error(request, 'Erro ao cadastrar Skill')
+    else:
+        form = SkillsModelForm(initial={'number_register': str(nr)})
+    data1 = NumbersRegisters.objects.get(number_register=nr)
+    data2 = AssociateData.objects.get(number_register=nr)
+    data3 = Skills.objects.filter(number_register=nr)
+    #print(data3)
+    context = {
+        'form': form,
+        'data1': data1,
+        'data2': data2,
+        'data3': data3,
+    }
+
+    return render(request, 'cadastro_atividade.html', context)

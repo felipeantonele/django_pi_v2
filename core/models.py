@@ -40,7 +40,7 @@ class Skills(models.Model):
     def __str__(self):
         return f'{self.number_register} {self.name_skill} {self.type_skill}'
 
-    objects = models.Manager()
+    #objects = models.Manager()
 
 
 
