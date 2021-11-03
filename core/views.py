@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from .models import Skills, NumbersRegisters, AssociateData
-from .forms import NrRegisterForm, AssociateDataModelForm, SkillsModelForm
+from .forms import NrRegisterForm, AssociateDataModelForm, SkillsModelForm, SearchForm
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
@@ -19,7 +19,28 @@ def index(request):
 
 
 def busca(request):
-    return render(request, 'busca.html')
+    was_searched = False
+    text_searched = ''
+    form = SearchForm(request.POST or None)
+    if str(request.method) == 'POST':
+        if form.is_valid() and str(form.cleaned_data['text_search']) != '':
+            text_searched = str(form.cleaned_data['text_search'])
+            #print(text_searched)
+            was_searched = True
+            results = Skills.objects.filter(name_skill__contains=form.cleaned_data['text_search']).order_by('-id')
+        else:
+            results = Skills.objects.all().order_by('-id')[:10]
+    else:
+        results = Skills.objects.all().order_by('-id')[:10]
+    form1 = SearchForm()
+    context = {
+        'results': results,
+        'logado': (str(request.user) != 'AnonymousUser'),
+        'form': form1,
+        'was_searched': was_searched,
+        'text_searched': text_searched,
+    }
+    return render(request, 'busca.html', context)
 
 
 def cadastro_nrs_registro(request):

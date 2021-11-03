@@ -42,3 +42,8 @@ class SkillsModelForm(forms.ModelForm):
     type_person = forms.CharField(label='Tipo de associação com o escoteiro', max_length=100)
     notes = forms.CharField(label='Anotações', max_length=100)
 
+
+class SearchForm(forms.Form):
+    help_text = 'Digite aqui para pesquisar uma competência, habilidade, hobby ou experiência'
+    text_search = forms.CharField(label='Digite aqui o termo para buscar', max_length=100, min_length=0, help_text=help_text, empty_value='')
+
