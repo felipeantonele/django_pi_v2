@@ -9,15 +9,15 @@
     <center>
         <img src="{% static 'images/logo_escoteiros_brasil.png' %}">
         {% if logado == True %}
-            <h3>Ok, usuário logado</h3><br><br><br>
-            <a href="busca">Clique aqui para ir a página de busca</a><br><br>
+            <h3>Ok, usuário logado - Áreas restritas liberadas para o usuário</h3><br><br><br>
+            <a href="busca">Página de busca</a><br><br>
         {% else %}
             <h3>Usuário não logado</h3><br>
             <p><a href="cad_esc">Clique aqui para cadastro de escoteiro</a></p><br>
             <p><a href="/admin/login/?next=/">Clique aqui para login</a></p><br><br><br>
         {% endif %}
-        <a href="cad_esc">Ir para o cadastro de escoteiros e Associados</a><br><br>
-        <a href="cadastro_nrs_registro">Ir para o cadastro de números de registro</a><br><br>
+        <a href="busca">Área restrita - Página de busca</a><br><br>
+        <a href="cadastro_nrs_registro">Área restrita - Cadastro de números de registro</a><br><br>
         <a href="admin/">ADMIN</a><br>
     </center>
 

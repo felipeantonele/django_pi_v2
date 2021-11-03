@@ -14,12 +14,12 @@
         </center>
         <h1>Cadastro de Escoteiros</h1>
 
-        <p>Escoteiro ID: {{ data.id }}</p>
-        <p>Número de registro: {{ data.number_register }}</p>
-        <p>Primeira função: {{ data.function_first }}</p>
-        <p>Segunda função: {{ data.function_second }}</p>
+        <p>Escoteiro ID: {{ data1.id }}</p>
+        <p>Número de registro: {{ data1.number_register }}</p>
+        <p>Primeira função: {{ data1.function_first }}</p>
+        <p>Segunda função: {{ data1.function_second }}</p>
         <p>Terceira função: {{ data.function_third }}</p>
-        <p>Seção: {{ data.section }}</p>
+        <p>Seção: {{ data1.section }}</p>
 
         {% bootstrap_messages %}
 
@@ -28,10 +28,32 @@
 
             {% bootstrap_form form %}
             {% buttons %}
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                {% if pca == True %}
+                    <button type="submit" class="btn btn-primary">Salvar e continuar</button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">Cadastrar e continuar</button>
+                {% endif %}
             {% endbuttons %}
         </form>
+
+        <form action="{% url 'cad_esc_p2' data.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" name = "apenas_continuar" value="Continuar sem alterar">
+        </form>
+        <br>
+        <form action="{% url 'cad_esc_p2' data.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" name = "delete_associate_data" value="Apagar todos os meus dados deste site">
+        </form>
+        <br><br>
+        <input type=button value="Voltar" onClick="javascript:history.go(-1);">
+        <br><br>
     </div>
+    <center>
+        <a href="cad_esc">Voltar para o cadastro de escoteiros e Associados</a><br><br>
+        <a href="admin/">ADMIN</a><br>
+        <a href="/">Página inicial</a><br>
+    </center>
     {% bootstrap_javascript jquery='full' %}
 </body>
 </html>

@@ -26,7 +26,7 @@ class AssociateDataModelForm(forms.ModelForm):
     responsible_2 = forms.CharField(label='Nome do Responsável 2', max_length=100)
     phone = forms.CharField(label='Telefone', max_length=15)
     email = forms.EmailField(label='E-mail')
-    accept_1 = forms.BooleanField(label='accept_1')
+    accept_1 = forms.BooleanField(label='Aceita parte 1?')
     accept_2 = forms.BooleanField(label='accept_2')
     accept_3 = forms.BooleanField(label='accept_3')
 

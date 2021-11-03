@@ -12,7 +12,7 @@
         <center>
             <img src="{% static 'images/logo_escoteiros_brasil.png' %}">
         </center>
-        <h1>Cadastro de Escoteiros</h1>
+        <h1>Competências - Associados ao Escoteiro</h1>
         <p>Número de registro: {{ data1.number_register }}</p>
         <p>Nome do Escoteiro: {{ data2.function_first }}</p>
         <p>Responsável 1: {{ data2.responsible_1 }}</p>
@@ -45,6 +45,7 @@
                     <th scope="col">Nome da pessoa</th>
                     <th scope="col">Tipo de associação com o escoteiro</th>
                     <th scope="col">Anotações</th>
+                    <th scope="col">Apagar</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,13 +58,27 @@
                         <td scope="row">{{ skill.name_person }}</td>
                         <td scope="row">{{ skill.type_person }}</td>
                         <td scope="row">{{ skill.notes }}</td>
+                        <td scope="row">
+
+                            <form action="{% url 'cadastro_atividade' data2.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" name="delete_skill" value='{{ skill.id }}'>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
 
         </table>
-
+        <br><br>
+        <input type=button value="Voltar" onClick="javascript:history.go(-1);">
+        <br><br>
+        <center>
+            <a href="admin/">ADMIN</a><br>
+            <a href="/">Página inicial</a><br>
+        </center>
     </div>
     {% bootstrap_javascript jquery='full' %}
 </body>
+
 </html>
