@@ -87,7 +87,13 @@ def cad_esc(request):
 
 def cad_esc_p2(request, pk):
     nr = NumbersRegisters.objects.filter(id=str(pk)).values_list('number_register', flat=True)[0]
+    if len(AssociateData.objects.filter(number_register=str(nr))) == 0:
+        possui_cad_associatedata = False
+    else:
+        possui_cad_associatedata = True
     if str(request.method) == 'POST':
+        form = AssociateDataModelForm(request.POST)
+
         if 'delete_associate_data' in request.POST:
             try:
                 AssociateData.objects.filter(number_register=str(nr)).delete()
@@ -100,28 +106,23 @@ def cad_esc_p2(request, pk):
                 print('Nenhuma skill')
                 pass
             return HttpResponseRedirect('/')
-        if 'apenas_continuar' in request.POST:
+        elif 'apenas_continuar' in request.POST:
             if len(AssociateData.objects.filter(number_register=str(nr))) == 0:
                 messages.error(request, 'Não é possível continuar sem o cadastro')
             else:
                 associete_cad_id = AssociateData.objects.filter(number_register=str(nr)).values_list('id', flat=True)[0]
                 return HttpResponseRedirect('/cadastro_atividade/' + str(associete_cad_id))
-    if len(AssociateData.objects.filter(number_register=str(nr))) == 0:
-        possui_cad_associatedata = False
-    else:
-        possui_cad_associatedata = True
-    if str(request.method) == 'POST':
-        form = AssociateDataModelForm(request.POST)
-        if form.is_valid():
-            if possui_cad_associatedata:
-                AssociateData.objects.filter(number_register=str(nr)).delete()
-            form.save()
-            associete_cad = form.save(commit=False)
-            messages.success(request, 'Dados do escoteiro  ' + str(associete_cad.name) + ' salvo com sucesso')
-            form = AssociateDataModelForm(initial={'number_register': str(nr)})
-            return HttpResponseRedirect('/cadastro_atividade/' + str(associete_cad.id))
         else:
-            messages.error(request, 'Erro ao cadastrar dados do escoteiro')
+            if form.is_valid():
+                if possui_cad_associatedata:
+                    AssociateData.objects.filter(number_register=str(nr)).delete()
+                form.save()
+                associete_cad = form.save(commit=False)
+                messages.success(request, 'Dados do escoteiro  ' + str(associete_cad.name) + ' salvo com sucesso')
+                form = AssociateDataModelForm(initial={'number_register': str(nr)})
+                return HttpResponseRedirect('/cadastro_atividade/' + str(associete_cad.id))
+            else:
+                messages.error(request, 'Erro ao cadastrar dados do escoteiro')
     else:
         if len(AssociateData.objects.filter(number_register=str(nr))) == 0:
             form = AssociateDataModelForm(initial={'number_register': str(nr)})
