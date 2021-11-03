@@ -19,8 +19,8 @@ class NrRegisterForm(forms.Form):
 class AssociateDataModelForm(forms.ModelForm):
     class Meta:
         model = AssociateData
-        fields = ['number_register','name','responsible_1','responsible_2','phone','email','accept_1','accept_2','accept_3']
-    number_register = forms.CharField(label='Número de Registro', max_length=20)
+        fields = ['name','responsible_1','responsible_2','phone','email','accept_1','accept_2','accept_3']
+    #number_register = forms.CharField(label='Número de Registro', max_length=20)
     name = forms.CharField(label='Nome do Escoteiro', max_length=100)
     responsible_1 = forms.CharField(label='Nome do Responsável 1', max_length=100)
     responsible_2 = forms.CharField(label='Nome do Responsável 2', max_length=100)
@@ -34,8 +34,8 @@ class AssociateDataModelForm(forms.ModelForm):
 class SkillsModelForm(forms.ModelForm):
     class Meta:
         model = Skills
-        fields = ['number_register','name_skill','type_skill','name_person','type_person','notes']
-    number_register = forms.CharField(label='Número de Registro', max_length=20)
+        fields = ['name_skill','type_skill','name_person','type_person','notes']
+    #number_register = forms.CharField(label='Número de Registro', max_length=20)
     name_skill = forms.CharField(label='Nome da Competência', max_length=100)
     type_skill = forms.CharField(widget=forms.Select(choices=types_of_skills), label='Tipo de Habilidade')
     name_person = forms.CharField(label='Nome da Pessoa', max_length=100)

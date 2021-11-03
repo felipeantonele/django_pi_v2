@@ -143,6 +143,7 @@ def cad_esc_p2(request, pk):
         elif 'apenas_continuar' in request.POST:
             if len(AssociateData.objects.filter(number_register=str(nr))) == 0:
                 messages.error(request, 'Não é possível continuar sem o cadastro')
+                form = AssociateDataModelForm(request.POST)
             else:
                 associete_cad_id = AssociateData.objects.filter(number_register=str(nr)).values_list('id', flat=True)[0]
                 return HttpResponseRedirect('/cadastro_atividade/' + str(associete_cad_id))
@@ -152,11 +153,14 @@ def cad_esc_p2(request, pk):
                     AssociateData.objects.filter(number_register=str(nr)).delete()
                 form.save()
                 associete_cad = form.save(commit=False)
+                associete_cad.number_register = str(nr)
+                associete_cad.save()
                 messages.success(request, 'Dados do escoteiro  ' + str(associete_cad.name) + ' salvo com sucesso')
                 form = AssociateDataModelForm(initial={'number_register': str(nr)})
                 return HttpResponseRedirect('/cadastro_atividade/' + str(associete_cad.id))
             else:
                 messages.error(request, 'Erro ao cadastrar dados do escoteiro')
+                form = AssociateDataModelForm(request.POST)
     else:
         if len(AssociateData.objects.filter(number_register=str(nr))) == 0:
             form = AssociateDataModelForm(initial={'number_register': str(nr)})
@@ -171,8 +175,9 @@ def cad_esc_p2(request, pk):
     data1 = NumbersRegisters.objects.get(id=pk)
     context = {
         'form': form,
-        'data': data1,
+        'data1': data1,
         'pca': possui_cad_associatedata,
+        'logado': (str(request.user) != 'AnonymousUser'),
     }
     return render(request, 'cad_esc_p2.html', context)
 
@@ -186,15 +191,12 @@ def cadastro_atividade(request, pk):
         else:
             form = SkillsModelForm(request.POST)
             if form.is_valid():
-                print(form.number_register)
-                if str(form.number_register) == str(nr):
-                    form.save()
-                    skill_cad = form.save(commit=False)
-                    messages.success(request, 'Competência associada com sucesso - ' + str(skill_cad.name_skill))
-                    form = SkillsModelForm(initial={'number_register': str(nr)})
-                else:
-                    messages.error(request, 'Número de registro não confere')
-                    form = SkillsModelForm(request.POST)
+                form.save()
+                skill_cad = form.save(commit=False)
+                skill_cad.number_register = str(nr)
+                skill_cad.save()
+                messages.success(request, 'Competência associada com sucesso - ' + str(skill_cad.name_skill))
+                form = SkillsModelForm(initial={'number_register': str(nr)})
             else:
                 messages.error(request, 'Erro ao cadastrar Skill')
                 form = SkillsModelForm(request.POST)
@@ -209,6 +211,7 @@ def cadastro_atividade(request, pk):
         'data1': data1,
         'data2': data2,
         'data3': data3,
+        'logado': (str(request.user) != 'AnonymousUser'),
     }
 
     return render(request, 'cadastro_atividade.html', context)

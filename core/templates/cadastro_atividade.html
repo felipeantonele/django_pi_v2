@@ -35,7 +35,7 @@
 
 
         <h2>Lista de competências e habilidades cadastradas</h2>
-        <table class="table table-dark">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -74,9 +74,14 @@
         <input type=button value="Voltar" onClick="javascript:history.go(-1);">
         <br><br>
         <center>
-            <a href="admin/">ADMIN</a><br>
+            <a href="/admin">ADMIN</a><br>
             <a href="/">Página inicial</a><br>
+            {% if logado == True %}
+                <a href="/busca">Área restrita - Página de busca</a><br>
+                <a href="/cadastro_nrs_registro">Área restrita - Cadastro de números de registro</a><br>
+            {% endif %}
         </center>
+        <br><br><br>
     </div>
     {% bootstrap_javascript jquery='full' %}
 </body>
