@@ -19,6 +19,7 @@ def index(request):
 
 
 def busca(request):
+    qtd = '10'
     was_searched = False
     text_searched = ''
     form = SearchForm(request.POST or None)
@@ -30,8 +31,10 @@ def busca(request):
             results = Skills.objects.filter(name_skill__contains=form.cleaned_data['text_search']).order_by('-id')
         else:
             results = Skills.objects.all().order_by('-id')[:10]
+            qtd = len(results)
     else:
         results = Skills.objects.all().order_by('-id')[:10]
+        qtd = len(results)
     form1 = SearchForm()
     context = {
         'results': results,
@@ -39,6 +42,7 @@ def busca(request):
         'form': form1,
         'was_searched': was_searched,
         'text_searched': text_searched,
+        'qtd': qtd,
     }
     return render(request, 'busca.html', context)
 

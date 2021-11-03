@@ -25,7 +25,7 @@
                 <button onclick="window.location.href='busca'">Limpar a busca</button><br>
                 <p>Resultado: '{{ text_searched }}'</p>
              {% else %}
-                <p>10 recentes competências e habilidades cadastradas</p>
+                <p>{{ qtd }} recentes competências e habilidades cadastradas (limite é 10)</p>
             {% endif %}
             <table class="table table-bordered">
                 <thead class="thead-dark">
