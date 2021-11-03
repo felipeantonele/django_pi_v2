@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
 # Create your views here.
-import os, sys
+import os, sys, urllib.parse
 
 
 def index(request):
@@ -56,7 +56,7 @@ def cadastro_nrs_registro(request):
             myfile = request.FILES['myfile']
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
-            dbframe = pd.read_excel("." + fs.url(filename), sheet_name='nrs_registro')
+            dbframe = pd.read_excel(urllib.parse.unquote("." + fs.url(filename)), sheet_name='nrs_registro')
             context['upload'] = True
             for irow in dbframe.itertuples():
                 if str(irow.delete).upper() == 'X':
@@ -72,7 +72,7 @@ def cadastro_nrs_registro(request):
                 else:
                     context['qtd_n_cad'] += 1
             del dbframe
-            os.remove(fs.url(filename).replace('/', ''))
+            os.remove(urllib.parse.unquote(fs.url(filename)).replace('/', ''))
             return render(request, 'cadastro_nrs_registro.html', context)
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
