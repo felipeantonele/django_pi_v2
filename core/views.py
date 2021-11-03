@@ -128,7 +128,6 @@ def cad_esc_p2(request, pk):
         possui_cad_associatedata = True
     if str(request.method) == 'POST':
         form = AssociateDataModelForm(request.POST)
-
         if 'delete_associate_data' in request.POST:
             try:
                 AssociateData.objects.filter(number_register=str(nr)).delete()
@@ -187,12 +186,18 @@ def cadastro_atividade(request, pk):
         else:
             form = SkillsModelForm(request.POST)
             if form.is_valid():
-                form.save()
-                skill_cad = form.save(commit=False)
-                messages.success(request, 'Competência associada com sucesso - ' + str(skill_cad.name_skill))
-                form = SkillsModelForm(initial={'number_register': str(nr)})
+                print(form.number_register)
+                if str(form.number_register) == str(nr):
+                    form.save()
+                    skill_cad = form.save(commit=False)
+                    messages.success(request, 'Competência associada com sucesso - ' + str(skill_cad.name_skill))
+                    form = SkillsModelForm(initial={'number_register': str(nr)})
+                else:
+                    messages.error(request, 'Número de registro não confere')
+                    form = SkillsModelForm(request.POST)
             else:
                 messages.error(request, 'Erro ao cadastrar Skill')
+                form = SkillsModelForm(request.POST)
     else:
         form = SkillsModelForm(initial={'number_register': str(nr)})
     data1 = NumbersRegisters.objects.get(number_register=nr)
