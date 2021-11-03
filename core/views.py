@@ -60,8 +60,22 @@ def cadastro_nrs_registro(request):
             context['upload'] = True
             for irow in dbframe.itertuples():
                 if str(irow.delete).upper() == 'X':
-                    NumbersRegisters.objects.filter(number_register=str(irow.number_register.split('-')[0].strip())).delete()
+                    nr=str(irow.number_register.split('-')[0].strip())
                     context['deletados'] += 1
+                    try:
+                        NumbersRegisters.objects.filter(number_register=nr).delete()
+                    except:
+                        pass
+                    try:
+                        AssociateData.objects.filter(number_register=str(nr)).delete()
+                    except:
+                        pass
+                    try:
+                        Skills.objects.filter(number_register=str(nr)).delete()
+                    except:
+                        # print('Nenhuma skill')
+                        pass
+
                     continue
                 if len(NumbersRegisters.objects.filter(number_register=str(irow.number_register.split('-')[0].strip()))) == 0:
                     context['qtd_cad'] += 1
@@ -119,12 +133,12 @@ def cad_esc_p2(request, pk):
             try:
                 AssociateData.objects.filter(number_register=str(nr)).delete()
             except:
-                print('Nenhuma associatedata')
+                #print('Nenhuma associatedata')
                 pass
             try:
                 Skills.objects.filter(number_register=str(nr)).delete()
             except:
-                print('Nenhuma skill')
+                #print('Nenhuma skill')
                 pass
             return HttpResponseRedirect('/')
         elif 'apenas_continuar' in request.POST:
